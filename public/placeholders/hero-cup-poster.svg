@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900" role="img" aria-labelledby="t d">
   <title id="t">Cangkir kopi Smiljan</title>
-  <desc id="d">Ilustrasi placeholder cangkir keramik dengan kopi, di atas cangkir wider dan dikelilingi biji kopi. Digunakan sebagai cadangan statis bila adegan 3D tidak dapat ditampilkan.</desc>
+  <desc id="d">Ilustrasi placeholder cangkir keramik dengan kopi, di atas cangkir yang lebih lebar dan dikelilingi biji kopi. Digunakan sebagai cadangan statis bila adegan 3D tidak dapat ditampilkan.</desc>
 
   <defs>
     <radialGradient id="bg" cx="0.42" cy="0.34" r="0.78">
@@ -132,8 +132,6 @@
   <!-- Film grain -->
   <rect width="900" height="900" filter="url(#grain)" opacity="0.14" style="mix-blend-mode:overlay" />
   <rect
-    width="900"
-    height="900"
     fill="none"
     stroke="#F2E9D8"
     stroke-opacity="0.2"

@@ -107,7 +107,10 @@ export function CoffeeHeroScene({ onReady }) {
         // Pausing the loop off-screen is the single biggest mobile win here.
         frameloop={isVisible ? "always" : "never"}
         dpr={[1, lowDetail ? 1.35 : 1.75]}
-        shadows={lowDetail ? false : true}
+        // `true` resolves to THREE.PCFSoftShadowMap, which three r186 removed
+        // (it logs a deprecation warning and silently downgrades). "percentage"
+        // maps to PCFShadowMap, which is the supported equivalent.
+        shadows={lowDetail ? false : "percentage"}
         camera={{ position: [3.5, 2.7, 4.5], fov: 30, near: 0.1, far: 60 }}
         gl={{
           antialias: !lowDetail,

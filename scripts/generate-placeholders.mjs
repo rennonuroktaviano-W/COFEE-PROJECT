@@ -8,7 +8,7 @@
  *
  * Run: node scripts/generate-placeholders.mjs
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -74,8 +74,15 @@ const DEFS = `
     </filter>
   </defs>`;
 
+/**
+ * Inset hairline border.
+ *
+ * NOTE: only one `width`/`height` pair may appear per element. Emitting the
+ * element size and the inset size as two separate attributes produces invalid
+ * XML, and browsers silently refuse to render such an SVG in an <img>.
+ */
 const frame = (w, h) =>
-  `<rect width="${w}" height="${h}" fill="none" stroke="${C.cream}" stroke-opacity="0.16" stroke-width="2" x="22" y="22" width="${w - 44}" height="${h - 44}"/>`;
+  `<rect fill="none" stroke="${C.cream}" stroke-opacity="0.16" stroke-width="2" x="22" y="22" width="${w - 44}" height="${h - 44}"/>`;
 
 const grain = (w, h, opacity = 0.13) =>
   `<rect width="${w}" height="${h}" filter="url(#grain)" opacity="${opacity}" style="mix-blend-mode:overlay"/>`;
@@ -419,6 +426,34 @@ const craft = [
   },
 ];
 
+/* --------------------------------------------------------------- validate */
+
+/**
+ * Duplicate attribute names are fatal for SVG: the file is not well-formed XML
+ * and browsers silently refuse to render it inside an <img>, which previously
+ * made every generated placeholder fail to decode. Catch that here so a bad
+ * template fails the build instead of shipping a blank hero.
+ */
+function assertWellFormed(label, svg) {
+  const problems = [];
+
+  for (const [tag] of svg.matchAll(/<[a-zA-Z][^>]*>/g)) {
+    const attrs = [...tag.matchAll(/\s([a-zA-Z][\w:-]*)\s*=/g)].map((m) => m[1]);
+
+    for (const dupe of new Set(attrs.filter((n, i) => attrs.indexOf(n) !== i))) {
+      problems.push(`${label}: duplicate attribute "${dupe}" in ${tag.trim()}`);
+    }
+
+    for (const m of tag.matchAll(/\s[a-zA-Z][\w:-]*\s*=\s*([^\s"'`=<>])/g)) {
+      problems.push(`${label}: unquoted attribute value ${JSON.stringify(m[1])} in ${tag.trim()}`);
+    }
+  }
+
+  if (problems.length > 0) {
+    throw new Error(`Invalid SVG:\n  ${problems.join("\n  ")}`);
+  }
+}
+
 /* ----------------------------------------------------------------- output */
 
 const files = [
@@ -460,7 +495,14 @@ const files = [
 await mkdir(OUT_DIR, { recursive: true });
 
 for (const { file, svg } of files) {
+  assertWellFormed(file, svg);
   await writeFile(join(OUT_DIR, file), svg, "utf8");
 }
 
+// The hand-written 3D fallback lives in the same directory but is not
+// generated, so validate it here too.
+const posterFile = join(OUT_DIR, "hero-cup-poster.svg");
+assertWellFormed("hero-cup-poster.svg", await readFile(posterFile, "utf8"));
+
 console.log(`Generated ${files.length} placeholder SVGs in public/placeholders/`);
+console.log("Validated all placeholder SVGs for duplicate attributes.");

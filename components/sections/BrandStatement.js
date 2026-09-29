@@ -27,12 +27,12 @@ export function BrandStatement() {
 
           <div className="lg:col-span-9">
             <Reveal delay={80}>
-              <p className="font-display text-[clamp(1.75rem,4.6vw,3.5rem)] leading-[1.14] font-light tracking-[-0.015em] text-balance text-cream">
+              <h2 className="font-display text-[clamp(1.75rem,4.6vw,3.5rem)] leading-[1.14] font-light tracking-[-0.015em] text-balance text-cream">
                 Kami percaya kopi yang baik tidak perlu buru-buru. Ia perlu
                 {" "}
                 <em className="italic text-beige">kesabaran</em>, proporsi yang tepat, dan
                 waktu agar rasa itu terungkap pelan-pelan sampai terasa jelas.
-              </p>
+              </h2>
             </Reveal>
 
             <Reveal delay={200}>

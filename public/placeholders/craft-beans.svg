@@ -98,5 +98,5 @@
   </g>
   <ellipse cx="512" cy="520" rx="440" ry="40" fill="url(#shadow)" filter="url(#blur)"/>
   <rect width="1024" height="576" filter="url(#grain)" opacity="0.13" style="mix-blend-mode:overlay"/>
-  <rect width="1024" height="576" fill="none" stroke="#F2E9D8" stroke-opacity="0.16" stroke-width="2" x="22" y="22" width="980" height="532"/>
+  <rect fill="none" stroke="#F2E9D8" stroke-opacity="0.16" stroke-width="2" x="22" y="22" width="980" height="532"/>
 </svg>

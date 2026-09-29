@@ -68,5 +68,5 @@
   <path d="M410 462c14 46 22 74 26 92" fill="none" stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="14" stroke-linecap="round"/>
   <ellipse cx="512" cy="562" rx="300" ry="24" fill="url(#shadow)" filter="url(#blur)"/>
   <rect width="1024" height="576" filter="url(#grain)" opacity="0.13" style="mix-blend-mode:overlay"/>
-  <rect width="1024" height="576" fill="none" stroke="#F2E9D8" stroke-opacity="0.16" stroke-width="2" x="22" y="22" width="980" height="532"/>
+  <rect fill="none" stroke="#F2E9D8" stroke-opacity="0.16" stroke-width="2" x="22" y="22" width="980" height="532"/>
 </svg>
