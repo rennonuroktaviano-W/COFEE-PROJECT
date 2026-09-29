@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Smiljan design system
+   Palette sourced directly from PRD section 4.2.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-espresso: #241711;
+  --color-roasted: #5a3828;
+  --color-cream: #f2e9d8;
+  --color-beige: #d8c4a5;
+  --color-olive: #77745a;
+
+  /* Tonal extensions derived from the base palette. */
+  --color-cream-deep: #e8dcc4;
+  --color-roasted-deep: #42281c;
+  --color-olive-deep: #55543f;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", "Palatino Linotype",
+    Palatino, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --spacing-gutter: 1.5rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offset for the fixed masthead when jumping to an anchor. */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* Guards against accidental horizontal scroll on narrow viewports. */
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-roasted);
+    color: var(--color-cream);
+  }
+
+  /* Consistent, high-contrast keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-olive);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  /* Never let long words or URLs force horizontal overflow. */
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  a {
+    overflow-wrap: break-word;
+  }
+}
+
+@layer components {
+  /* Small uppercase label used above every section heading (PRD 4.3). */
+  .label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 768px) {
+    .label {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Page shell: responsive gutter shared by every section. */
+  .shell {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 4rem;
+    }
+  }
+
+  /* Thin paper grain layered over the whole page (PRD 4.4). */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    background-image: url("/textures/grain.svg");
+    background-repeat: repeat;
+    background-size: 180px 180px;
+    opacity: 0.28;
+    mix-blend-mode: multiply;
+  }
+}
+
+@layer utilities {
+  /* ---- Scroll reveal ------------------------------------------------
+     The hidden state is scoped to `.js` (set by an inline script in the
+     root layout) so the page stays fully readable when JavaScript is off. */
+  .js .reveal {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 1.25rem), 0);
+    transition:
+      opacity 900ms var(--ease-editorial),
+      transform 900ms var(--ease-editorial);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Mask reveal for photography (PRD 6.2 "Image transitions"). */
+  .js .mask-reveal {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1200ms var(--ease-editorial);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js .mask-reveal.is-visible {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: honour the operating-system preference (PRD 6.1, 10).
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .reveal,
+  .js .mask-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
